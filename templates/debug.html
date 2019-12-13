@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Debug Similarity</title>
+</head>
+<body>
+<img src="{{ query }}">
+<div>
+    {% for s_results in results %}
+        <div style="display: inline-block">
+            {% for r in s_results %}
+                <div>Score: {{ r[1] }}</div>
+                <img src="{{ r[0] }}">
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+</body>
+</html>

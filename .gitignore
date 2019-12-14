@@ -1,6 +1,7 @@
 # Project
 data/
 static/images/
+config.json
 
 # Python
 venv/

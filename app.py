@@ -6,10 +6,11 @@ from typing import List, Tuple, Sequence, Dict
 from flask import Flask, render_template
 
 import similarity
-import tables
 import triplets
+from tables import db
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 with open('config.json') as config_file:
     db_json = json.load(config_file)['database']
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{}:{}@{}:{}/{}'.format(
@@ -19,10 +20,13 @@ with open('config.json') as config_file:
         db_json['port'],
         db_json['database']
     )
-tables.db.init_app(app)
+db.init_app(app)
 
-with app.app_context():
-    tables.db.create_all()
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+        similarity.load_all_items(db.session)
 
 
 @app.route('/debug')
@@ -41,7 +45,3 @@ def debug_similarity():
 @app.route('/triplets')
 def view_triplets():
     return render_template('triplets.html', triplets=triplets.get_triplets(1000))
-
-
-if __name__ == '__main__':
-    app.run()

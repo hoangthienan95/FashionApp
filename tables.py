@@ -24,20 +24,14 @@ class FashionItem(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
+    category = db.Column(db.String(100), nullable=False)
+    semantic_category = db.Column(db.String(100), nullable=False)
 
-    embeddings = db.relationship('ItemEmbedding', order_by='ItemEmbedding.mask', lazy=False)
-
-
-class ItemEmbedding(db.Model):
-    __tablename__ = 'embeddings'
-
-    item_id = db.Column(db.Integer, db.ForeignKey('fashion_items.id'), nullable=False)
-    mask = db.Column(db.Integer, nullable=False)
-    vector = db.Column(db.String(2500), nullable=False)
-
-    __table_args__ = (
-        db.PrimaryKeyConstraint(item_id, mask),
-    )
+    full_embedding = db.Column(db.String(2000), nullable=False)
+    mask_1_embedding = db.Column(db.String(2000), nullable=False)
+    mask_2_embedding = db.Column(db.String(2000), nullable=False)
+    mask_3_embedding = db.Column(db.String(2000), nullable=False)
+    mask_4_embedding = db.Column(db.String(2000), nullable=False)
 
 
 outfit_items = db.Table(

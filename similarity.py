@@ -1,9 +1,13 @@
 import json
 import os
+import time
 from typing import Tuple, List, Dict
 
 from annoy import AnnoyIndex
 from annoy.annoylib import Annoy
+from sqlalchemy.orm import Session
+
+from tables import FashionItem
 
 NUM_MASKS = 4
 EMBEDDING_SIZE = 64
@@ -15,6 +19,65 @@ ANNOY_EXT = '.ann'
 IMAGE_EXT = '.jpg'
 
 ITEM_METADATA_FILE_PATH = 'data/item_metadata.json'
+CATEGORIES_FILE_PATH = 'data/categories.csv'
+
+
+def load_all_items(session: Session):
+    print('Loading all items.')
+    categories: Dict[int, str] = {}
+
+    with open(CATEGORIES_FILE_PATH) as categories_file:
+        for line in categories_file:
+            cat_id, name, _ = line.strip('\n').split(',')
+            cat_id = int(cat_id)
+
+            categories[cat_id] = name
+
+    items: Dict[str, Tuple[str, str, List[str]]] = {}
+
+    with open(ITEM_METADATA_FILE_PATH) as metadata_file:
+        metadata_json: Dict = json.load(metadata_file)
+
+        for item_name, item_json in metadata_json.items():
+            cat = categories[int(item_json['category_id'])]
+            semantic_cat = item_json['semantic_category']
+
+            items[item_name] = (cat, semantic_cat, [])
+
+    embeddings_paths = ['full_embeddings.csv'] + ['mask_{}_embeddings.csv'.format(i + 1) for i in range(NUM_MASKS)]
+    embeddings_paths = [os.path.join(EMBEDDINGS_DIR, p) for p in embeddings_paths]
+
+    for em_path in embeddings_paths:
+        with open(em_path) as embeddings_file:
+            for line in embeddings_file:
+                sp = line.strip('\n').split(', ')
+                n = sp[0].strip(IMAGE_EXT)
+                v = ','.join(sp[1:])
+
+                try:
+                    items[n][2].append(v)
+                except KeyError:
+                    pass
+
+    print('Creating ORM objects.')
+    db_items = []
+    for name, (cat, semantic_cat, embeddings) in items.items():
+        db_items.append(FashionItem(
+            name=name,
+            category=cat,
+            semantic_category=semantic_cat,
+            full_embedding=embeddings[0],
+            mask_1_embedding=embeddings[1],
+            mask_2_embedding=embeddings[2],
+            mask_3_embedding=embeddings[3],
+            mask_4_embedding=embeddings[4]
+        ))
+
+    print('Inserting items.')
+    start_time = time.time()
+    session.bulk_save_objects(db_items)
+    session.commit()
+    print('Finished inserting items (took {:.2f}s)'.format(time.time() - start_time))
 
 
 def get_index(embeddings_path: str, embedding_size: int, load_paths: bool = False) -> Tuple[Annoy, List[str]]:

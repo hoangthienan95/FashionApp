@@ -1,9 +1,11 @@
+import os
 import random
-from typing import List, Tuple
+from typing import List, Tuple, Sequence
 
 from flask import Flask, render_template
 
 import similarity
+import triplets
 
 app = Flask(__name__)
 
@@ -17,6 +19,11 @@ def debug_similarity():
         results.append(similarity.get_nn_paths(index, query, 100))
 
     return render_template('debug.html', query=query, results=results)
+
+
+@app.route('/triplets')
+def view_triplets():
+    return render_template('triplets.html', triplets=triplets.get_triplets(1000))
 
 
 if __name__ == '__main__':

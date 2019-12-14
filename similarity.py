@@ -17,7 +17,7 @@ def get_index(embeddings_path: str, embedding_size: int, load_paths: bool = Fals
     embeddings_name = os.path.splitext(os.path.basename(embeddings_path))[0]
     index_path = os.path.join(INDEXES_DIR, embeddings_name + ANNOY_EXT)
 
-    index = AnnoyIndex(embedding_size, 'angular')
+    index = AnnoyIndex(embedding_size, 'euclidean')
     if os.path.exists(index_path):
         print('Loaded index {}'.format(index_path))
         index.load(index_path)

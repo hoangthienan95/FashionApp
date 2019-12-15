@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="nav">
+        <div class="nav-items">
+            <a class="nav-item nav-action" href="{{ url_for('login') }}">Log In</a>
+            <a class="nav-item nav-action" href="{{ url_for('signup') }}">Sign Up</a>
+        </div>
+    </div>
+    {% block form_content %}
+    {% endblock %}
+{% endblock %}

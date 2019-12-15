@@ -1,0 +1,15 @@
+{% extends 'nav_base.html' %}
+{% block title %}Wardrobe{% endblock %}
+{% block page_content %}
+    <div class="wardrobe-items">
+    {% if user_wardrobe|length == 0 %}
+        <div class="empty-wardrobe-container">
+            <div>Wardrobe Empty</div>
+            <a class="btn" href="{{ url_for('randomize_wardrobe') }}">Randomize</a>
+        </div>
+    {% endif %}
+    {% for item in user_wardrobe %}
+        <img class="wardrobe-item" src="{{ item.get_path() }}">
+    {% endfor %}
+    </div>
+{% endblock %}

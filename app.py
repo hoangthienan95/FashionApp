@@ -18,7 +18,9 @@ Session(app)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 with open('config.json') as config_file:
-    db_json = json.load(config_file)['database']
+    config_json = json.load(config_file)
+
+    db_json = config_json['database']
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{}:{}@{}:{}/{}'.format(
         db_json['user'],
         db_json['password'],
@@ -26,6 +28,8 @@ with open('config.json') as config_file:
         db_json['port'],
         db_json['database']
     )
+
+    app.config['SECRET_KEY'] = config_json['secret_key']
 db.init_app(app)
 
 
@@ -44,8 +48,8 @@ USER_ID_KEY = 'user_id'
 
 @app.route('/')
 def index():
-    if session[USER_ID_KEY] is not None:
-        return redirect(url_for('outfits'))
+    if USER_ID_KEY in session:
+        return redirect(url_for('wardrobe'))
 
     return redirect(url_for('login'))
 
@@ -55,14 +59,14 @@ def login():
     form = LogInForm()
 
     if form.validate_on_submit():
-        user = db.session.query(User).filter(User.username == form.username).first()
+        user = db.session.query(User).filter(User.username == form.username.data).first()
         if user is not None:
             session[USER_ID_KEY] = user.id
             return redirect(url_for('index'))
 
         form.username.errors.append('Unknown user.')
 
-    return render_template('', form=form)
+    return render_template('login.html', form=form)
 
 
 @app.route('/logout')
@@ -70,7 +74,7 @@ def logout():
     if USER_ID_KEY in session:
         session.pop(USER_ID_KEY)
 
-    return redirect(url_for('/'))
+    return redirect(url_for('index'))
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -78,18 +82,23 @@ def signup():
     form = SignUpForm()
 
     if form.validate_on_submit():
-        user = db.session.query(User).filter(User.username == form.username).first()
+        user = db.session.query(User).filter(User.username == form.username.data).first()
         if user is None:
-            user = User(username=form.username)
+            user = User(username=form.username.data)
             db.session.add(user)
-            db.commit()
+            db.session.commit()
 
             session[USER_ID_KEY] = user.id
             return redirect(url_for('index'))
 
         form.username.errors.append('That username is taken.')
 
-    return render_template('', form=form)
+    return render_template('signup.html', form=form)
+
+
+def item_from_path(path: str) -> FashionItem:
+    item_name = os.path.splitext(os.path.basename(path))[0]
+    return db.session.query(FashionItem).filter(FashionItem.name == item_name).one()
 
 
 @app.route('/wardrobe')
@@ -98,7 +107,28 @@ def wardrobe():
         return redirect('/')
 
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
-    return render_template('', user_wardrobe=user.wardrobe_items)
+    return render_template('wardrobe.html',
+                           username=user.username,
+                           user_wardrobe=user.wardrobe_items)
+
+
+@app.route('/randomize-wardrobe')
+def randomize_wardrobe():
+    if USER_ID_KEY not in session:
+        return redirect('/')
+
+    user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
+    if len(user.wardrobe_items) > 0:
+        abort(400)
+
+    random_ids = random.sample(list(range(0, 250000)), random.randrange(200, 300))
+
+    random_items = db.session.query(FashionItem).filter(FashionItem.id.in_(random_ids)).all()
+    for item in random_items:
+        user.wardrobe_items.append(item)
+    db.session.commit()
+
+    return redirect(url_for('wardrobe'))
 
 
 @app.route('/outfits')
@@ -107,7 +137,9 @@ def outfits():
         return redirect('/')
 
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
-    return render_template('', outfits=user.outfits)
+    return render_template('',
+                           username=user.username,
+                           outfits=user.outfits)
 
 
 @app.route('/creator')
@@ -116,12 +148,7 @@ def outfit_creator():
         return redirect('/')
 
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
-    return render_template('')
-
-
-def item_from_path(path: str) -> FashionItem:
-    item_name = os.path.splitext(os.path.basename(path))[0]
-    return db.session.query(FashionItem).filter(FashionItem.name == item_name).one()
+    return render_template('', username=user.username)
 
 
 @app.route('/api/add_outfit_item')

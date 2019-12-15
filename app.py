@@ -152,8 +152,8 @@ def outfit_creator():
                            categories=similarity.MERGED_CATEGORIES)
 
 
-@app.route('/api/add_outfit_item')
-def api_add_outfit_item():
+@app.route('/api/add_wardrobe_item', methods=['POST'])
+def api_add_wardrobe_item():
     if USER_ID_KEY not in session:
         abort(403)
 
@@ -170,8 +170,8 @@ def api_add_outfit_item():
     })
 
 
-@app.route('/api/remove_outfit_item')
-def api_remove_outfit_item():
+@app.route('/api/remove_wardrobe_item', methods=['POST'])
+def api_remove_wardrobe_item():
     if USER_ID_KEY not in session:
         abort(403)
 
@@ -214,7 +214,7 @@ def api_create_outfit():
     })
 
 
-@app.route('/api/delete_outfit')
+@app.route('/api/delete_outfit', methods=['POST'])
 def api_delete_outfit():
     if USER_ID_KEY not in session:
         abort(403)

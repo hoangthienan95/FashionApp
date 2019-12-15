@@ -196,6 +196,11 @@ body {
 .outfit-header {
     margin-top: 10px;
     margin-left: 15px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .outfit-name {
@@ -203,6 +208,24 @@ body {
     font-size: 30px;
     font-weight: 500;
     color: white;
+}
+
+.outfit-delete {
+    border: none;
+    color: white;
+    background-color: indianred;
+    margin-right: 15px;
+
+    font-size: 20px;
+
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+.outfit-delete:hover {
+    background-color: orangered;
+}
+.outfit-delete:active {
+    background-color: red;
 }
 
 .outfit-item {

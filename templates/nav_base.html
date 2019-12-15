@@ -6,7 +6,7 @@
             <a class="nav-item nav-link" href="{{ url_for('outfits') }}">Outfits</a>
             <a class="nav-item nav-link" href="{{ url_for('wardrobe') }}">Wardrobe</a>
 
-            <span class="nav-item nav-info">{{ username }}</span>
+            <span class="nav-item nav-info">{{ username|escape }}</span>
             <a class="nav-item nav-action" href="{{ url_for('logout') }}">Log Out</a>
         </div>
     </div>

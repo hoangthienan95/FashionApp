@@ -148,7 +148,10 @@ def outfit_creator():
         return redirect('/')
 
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
-    return render_template('', username=user.username)
+    return render_template('outfit_creator.html',
+                           username=user.username,
+                           user_wardrobe=user.wardrobe_items,
+                           categories=similarity.MERGED_CATEGORIES)
 
 
 @app.route('/api/add_outfit_item')

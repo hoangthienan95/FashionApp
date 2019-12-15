@@ -39,6 +39,14 @@ class FashionItem(db.Model):
     def get_path(self) -> str:
         return os.path.join('static/images', self.name + '.jpg')
 
+    def merged_category(self) -> str:
+        c = self.semantic_category
+        if c in ['scarves', 'sunglasses', 'jewellery']:
+            c = 'accessories'
+        elif c == 'outerwear':
+            c = 'tops'
+        return c
+
 
 outfit_items = db.Table(
     'outfit_items',

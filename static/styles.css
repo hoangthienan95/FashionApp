@@ -10,6 +10,7 @@ body {
 .form-container {
     width: auto;
     text-align: center;
+    margin-top: 50px;
 }
 
 .form-input {
@@ -30,7 +31,6 @@ body {
 .nav {
     width: auto;
     height: 60px;
-    margin-bottom: 50px;
 
     text-align: center;
     background-color: darkslategray;
@@ -104,4 +104,65 @@ body {
 .wardrobe-item {
     width: 100px;
     margin: 20px;
+}
+
+
+/* ------------------------------ */
+
+.creator-container {
+    width: auto;
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.creator-wardrobe {
+    width: 20%;
+    height: 100%;
+
+    padding-top: 20px;
+    box-sizing: border-box;
+
+    background-color: lightslategray;
+
+    overflow: scroll;
+    text-align: center;
+}
+
+.creator-outfit {
+    width: 50%;
+    height: 100%;
+
+    text-align: center;
+}
+
+.creator-recommend {
+    width: 30%;
+    height: 100%;
+    background-color: lightslategray;
+}
+
+
+.creator-item-sm {
+    width: 60px;
+    margin: 5px;
+}
+
+.creator-item-lg {
+    width: 65px;
+    margin: 0;
+}
+
+.outfit-category {
+    width: auto;
+    max-width: 100%;
+    height: 75px;
+
+    white-space: nowrap;
+    overflow: scroll;
+}
+.outfit-category:first-child {
+    margin-top: 50px;
 }

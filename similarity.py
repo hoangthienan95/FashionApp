@@ -23,6 +23,16 @@ IMAGE_EXT = '.jpg'
 ITEM_METADATA_FILE_PATH = 'data/item_metadata.json'
 CATEGORIES_FILE_PATH = 'data/categories.csv'
 
+MERGED_CATEGORIES = [
+    'hats',
+    'tops',
+    'bottoms',
+    'all-body',
+    'shoes',
+    'bags',
+    'accessories'
+]
+
 
 def load_all_items(session: Session):
     print('Loading all items.')

@@ -172,7 +172,8 @@ def get_nn_paths(session: Session, index: Annoy, query: FashionItem,
 
 
 def get_nns_by_category(session: Session, index: Annoy, query: FashionItem, results_per_category: int,
-                        for_categories: List[str] = None) -> Dict[str, List[Tuple[str, float]]]:
+                        num_neighbors: int = 1000,
+                        for_categories: List[str] = None) -> Dict[str, List[Tuple[FashionItem, float]]]:
     if for_categories is None:
         for_categories = [
             'tops',
@@ -188,11 +189,10 @@ def get_nns_by_category(session: Session, index: Annoy, query: FashionItem, resu
             'accessories'
         ]
 
-    num_results = 1000
-    results: Dict[str, List[Tuple[str, float]]] = {c: [] for c in for_categories}
+    results: Dict[str, List[Tuple[FashionItem, float]]] = {c: [] for c in for_categories}
     num_filled = 0
 
-    for item, score in get_nn_paths(session, index, query, num_results):
+    for item, score in get_nn_paths(session, index, query, num_neighbors):
         if num_filled >= len(for_categories):
             break
 

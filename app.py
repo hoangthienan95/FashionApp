@@ -206,7 +206,40 @@ def api_delete_outfit():
 
 @app.route('/api/recommend')
 def api_recommend():
-    pass
+    if USER_ID_KEY not in session:
+        abort(403)
+
+    user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
+    query_item = item_from_path(request.json['item_path'])
+
+    mask_i = random.randrange(1, 5)
+    if request.json['wardrobe']:
+        wardrobe_indexes = similarity.create_indexes(user.wardrobe_items)
+
+        results = similarity.get_nns_by_category(
+            session=db.session,
+            index=wardrobe_indexes[mask_i],
+            query=query_item,
+            results_per_category=1,
+            num_neighbors=min(1000, len(user.wardrobe_items))
+        )
+    else:
+        results = similarity.get_nns_by_category(
+            session=db.session,
+            index=similarity.PRIMARY_INDEXES[mask_i],
+            query=query_item,
+            results_per_category=1,
+            num_neighbors=min(1000, len(user.wardrobe_items))
+        )
+
+    results_json = {
+        cat: [i[0].get_path() for i in cat_results] for cat, cat_results in results.items()
+    }
+
+    return jsonify({
+        'query_id': query_item.id,
+        'results': results_json
+    })
 
 
 @app.route('/debug')

@@ -158,10 +158,12 @@ def api_add_wardrobe_item():
         abort(403)
 
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
+    item = db.session.query(FashionItem).filter(FashionItem.id == request.json['item_id']).one()
 
-    item = item_from_path(request.json['item_path'])
+    if item in user.wardrobe_items:
+        abort(400)
 
-    user.items.append(item)
+    user.wardrobe_items.append(item)
     db.session.commit()
 
     return jsonify({
@@ -176,13 +178,12 @@ def api_remove_wardrobe_item():
         abort(403)
 
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
+    item = db.session.query(FashionItem).filter(FashionItem.id == request.json['item_id']).one()
 
-    item = item_from_path(request.json['item_path'])
-
-    if item not in user.items:
+    if item not in user.wardrobe_items:
         abort(400)
 
-    user.items.remove(item)
+    user.wardrobe_items.remove(item)
     db.session.commit()
 
     return jsonify({

@@ -9,7 +9,15 @@
         </div>
     {% endif %}
     {% for item in user_wardrobe %}
-        <img class="wardrobe-item" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
+        <div class="wardrobe-item" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
+            <div class="wardrobe-info">
+                <span class="wardrobe-text">{{ item.id }}</span>
+                <button class="wardrobe-remove">X</button>
+            </div>
+            <img class="wardrobe-img" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
+        </div>
     {% endfor %}
     </div>
+
+    <script src="/static/wardrobe.js"></script>
 {% endblock %}

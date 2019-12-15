@@ -90,8 +90,12 @@ body {
     background-color: lightblue;
     border-radius: 10px;
 }
+.btn:hover {
+    background-color: deepskyblue;
+    cursor: pointer;
+}
 .btn:active {
-    color: deepskyblue;
+    background-color: dodgerblue;
 }
 
 /* ------------------------------ */
@@ -139,10 +143,13 @@ body {
 }
 
 .creator-recommend {
+    box-sizing: border-box;
+
     width: 30%;
     height: 100%;
     background-color: lightslategray;
     padding: 0 20px;
+    padding-top: 10px;
 }
 
 
@@ -161,4 +168,9 @@ body {
 }
 .category:first-child {
     margin-top: 50px;
+}
+
+.creator-submit {
+    border: none;
+    margin-bottom: 10px;
 }

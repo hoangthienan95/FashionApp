@@ -191,13 +191,14 @@ def api_remove_outfit_item():
     })
 
 
-@app.route('/api/create_outfit')
+@app.route('/api/create_outfit', methods=['POST'])
 def api_create_outfit():
     if USER_ID_KEY not in session:
         abort(403)
 
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
-    items = [item_from_path(p) for p in request.json['item_paths']]
+    items = db.session.query(FashionItem).filter(FashionItem.id.in_(request.json['items'])).all()
+
     outfit = Outfit(
         name=request.json['name'] if 'name' in request.json else 'Untitled',
         items=items

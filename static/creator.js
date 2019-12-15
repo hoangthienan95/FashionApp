@@ -111,3 +111,31 @@ async function loadRecommendations(itemId) {
         }
     }
 }
+
+async function submitOutfit() {
+    let body = {
+        'items': []
+    };
+
+    for (let cat of categories) {
+        for (let itemId of outfitCategoryItems[cat]) {
+            body['items'].push(itemId)
+        }
+    }
+
+    const response = await fetch('api/create_outfit', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (response.ok) {
+        window.location = '/outfits'
+    }
+}
+
+document.getElementById('create-button').addEventListener('click', ev => {
+    submitOutfit();
+});

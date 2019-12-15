@@ -1,14 +1,15 @@
 import json
+import os
 import random
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, NamedTuple
 
-from flask import Flask, render_template, redirect, url_for, session
+from flask import Flask, render_template, redirect, url_for, session, request, jsonify, abort
 from flask_session import Session
 
 import similarity
 import triplets
 from forms import LogInForm, SignUpForm
-from tables import db, FashionItem, User
+from tables import db, FashionItem, User, Outfit
 
 app = Flask(__name__)
 
@@ -28,9 +29,10 @@ with open('config.json') as config_file:
 db.init_app(app)
 
 
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
+with app.app_context():
+    db.create_all()
+
+    if __name__ == '__main__':
         similarity.load_all_items(db.session)
 
 with app.app_context():
@@ -48,7 +50,7 @@ def index():
     return redirect(url_for('login'))
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LogInForm()
 
@@ -71,7 +73,7 @@ def logout():
     return redirect(url_for('/'))
 
 
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignUpForm()
 
@@ -92,37 +94,114 @@ def signup():
 
 @app.route('/wardrobe')
 def wardrobe():
-    pass
+    if USER_ID_KEY not in session:
+        return redirect('/')
+
+    user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
+    return render_template('', user_wardrobe=user.wardrobe_items)
 
 
 @app.route('/outfits')
 def outfits():
-    pass
+    if USER_ID_KEY not in session:
+        return redirect('/')
+
+    user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
+    return render_template('', outfits=user.outfits)
 
 
 @app.route('/creator')
 def outfit_creator():
-    pass
+    if USER_ID_KEY not in session:
+        return redirect('/')
+
+    user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
+    return render_template('')
+
+
+def item_from_path(path: str) -> FashionItem:
+    item_name = os.path.splitext(os.path.basename(path))[0]
+    return db.session.query(FashionItem).filter(FashionItem.name == item_name).one()
 
 
 @app.route('/api/add_outfit_item')
 def api_add_outfit_item():
-    pass
+    if USER_ID_KEY not in session:
+        abort(403)
+
+    user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
+
+    item = item_from_path(request.json['item_path'])
+
+    user.items.append(item)
+    db.session.commit()
+
+    return jsonify({
+        'success': True,
+        'item_id': item.id
+    })
 
 
 @app.route('/api/remove_outfit_item')
 def api_remove_outfit_item():
-    pass
+    if USER_ID_KEY not in session:
+        abort(403)
+
+    user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
+
+    item = item_from_path(request.json['item_path'])
+
+    if item not in user.items:
+        abort(400)
+
+    user.items.remove(item)
+    db.session.commit()
+
+    return jsonify({
+        'success': True,
+        'item_id': item.id
+    })
 
 
 @app.route('/api/create_outfit')
 def api_create_outfit():
-    pass
+    if USER_ID_KEY not in session:
+        abort(403)
+
+    user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
+    items = [item_from_path(p) for p in request.json['item_paths']]
+    outfit = Outfit(
+        name=request.json['name'] if 'name' in request.json else 'Untitled',
+        items=items
+    )
+
+    user.outfits.append(outfit)
+    db.session.commit()
+
+    return jsonify({
+        'success': True,
+        'outfit_id': outfit.id,
+        'item_ids': [item.id for item in outfit.items]
+    })
 
 
 @app.route('/api/delete_outfit')
 def api_delete_outfit():
-    pass
+    if USER_ID_KEY not in session:
+        abort(403)
+
+    user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
+    outfit = db.session.query(Outfit).filter(Outfit.id == request.json['outfit_id']).one()
+
+    if outfit not in user.outfits:
+        abort(400)
+
+    db.session.delete(outfit)
+    db.session.commit()
+
+    return jsonify({
+        'success': True
+    })
 
 
 @app.route('/api/recommend')

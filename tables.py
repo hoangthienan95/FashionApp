@@ -19,6 +19,7 @@ class User(db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
 
     wardrobe_items = db.relationship('FashionItem', secondary=user_items, lazy=True)
+    outfits = db.relationship('Outfit', back_populates='user', lazy=True)
 
 
 class FashionItem(db.Model):
@@ -52,4 +53,7 @@ class Outfit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    user = db.relationship('User', back_populates='outfits')
     items = db.relationship('FashionItem', secondary=outfit_items, lazy=False)

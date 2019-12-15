@@ -135,7 +135,7 @@ def outfits():
         return redirect('/')
 
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
-    return render_template('',
+    return render_template('outfits.html',
                            username=user.username,
                            outfits=user.outfits)
 

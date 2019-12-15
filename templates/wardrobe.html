@@ -9,7 +9,7 @@
         </div>
     {% endif %}
     {% for item in user_wardrobe %}
-        <img class="wardrobe-item" src="{{ item.get_path() }}">
+        <img class="wardrobe-item" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
     {% endfor %}
     </div>
 {% endblock %}

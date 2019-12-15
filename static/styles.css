@@ -174,3 +174,38 @@ body {
     border: none;
     margin-bottom: 10px;
 }
+
+
+/* ------------------------------ */
+
+.outfits {
+    margin-top: 50px;
+    margin-left: 20px;
+}
+
+.outfit {
+    width: auto;
+    max-width: 100%;
+    display: inline-block;
+    margin-bottom: 20px;
+
+    background-color: lightslategray;
+    padding: 0 15px;
+}
+
+.outfit-header {
+    margin-top: 10px;
+    margin-left: 15px;
+}
+
+.outfit-name {
+    display: inline-block;
+    font-size: 30px;
+    font-weight: 500;
+    color: white;
+}
+
+.outfit-item {
+    width: 100px;
+    margin: 15px;
+}

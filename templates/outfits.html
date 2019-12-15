@@ -1,0 +1,16 @@
+{% extends 'nav_base.html' %}
+{% block title %}Wardrobe{% endblock %}
+{% block page_content %}
+    <div class="outfits">
+    {% for outfit in outfits %}
+        <div class="outfit">
+        <div class="outfit-header">
+            <div class="outfit-name">{{ outfit.name }}</div>
+        </div>
+        {% for item in outfit.items %}
+            <img class="outfit-item" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
+        {% endfor %}
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

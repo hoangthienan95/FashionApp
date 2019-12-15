@@ -123,6 +123,12 @@ async function submitOutfit() {
         }
     }
 
+    const name = document.getElementById('outfit-name').value;
+
+    if (name !== '') {
+        body['name'] = name;
+    }
+
     const response = await fetch('api/create_outfit', {
         method: 'POST',
         body: JSON.stringify(body),

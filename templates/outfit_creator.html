@@ -13,7 +13,10 @@
             {% endfor %}
         </div>
         <div class="creator-recommend" id="recommend">
-            <button class="btn creator-submit" id="create-button">Submit</button>
+            <div class="recommend-header">
+                <input type="text" class="creator-outfit-name" id="outfit-name" size="15" placeholder="Untitled">
+                <button class="btn creator-submit" id="create-button">Submit</button>
+            </div>
             {% for category in categories %}
                 <div class="category" data-category="{{ category }}"></div>
             {% endfor %}

@@ -32,7 +32,6 @@ with open('config.json') as config_file:
     app.config['SECRET_KEY'] = config_json['secret_key']
 db.init_app(app)
 
-
 with app.app_context():
     db.create_all()
 
@@ -41,7 +40,6 @@ with app.app_context():
 
 with app.app_context():
     similarity.load_primary_indexes(db.session)
-
 
 USER_ID_KEY = 'user_id'
 
@@ -234,13 +232,13 @@ def api_delete_outfit():
     })
 
 
-@app.route('/api/recommend')
+@app.route('/api/recommend', methods=['POST'])
 def api_recommend():
     if USER_ID_KEY not in session:
         abort(403)
 
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
-    query_item = item_from_path(request.json['item_path'])
+    query_item = db.session.query(FashionItem).filter(FashionItem.id == request.json['item_id']).one()
 
     mask_i = random.randrange(1, 5)
     if request.json['wardrobe']:
@@ -250,7 +248,7 @@ def api_recommend():
             session=db.session,
             index=wardrobe_indexes[mask_i],
             query=query_item,
-            results_per_category=1,
+            results_per_category=100,
             num_neighbors=min(1000, len(user.wardrobe_items))
         )
     else:
@@ -262,12 +260,16 @@ def api_recommend():
             num_neighbors=min(1000, len(user.wardrobe_items))
         )
 
-    results_json = {
-        cat: [i[0].get_path() for i in cat_results] for cat, cat_results in results.items()
-    }
+    results_json = []
+    for cat, cat_results in results.items():
+        for item, score in cat_results:
+            results_json.append({
+                'id': item.id,
+                'path': item.get_path(),
+                'category': item.merged_category()
+            })
 
     return jsonify({
-        'query_id': query_item.id,
         'results': results_json
     })
 

@@ -11,7 +11,7 @@ from tables import FashionItem
 
 NUM_MASKS = 4
 EMBEDDING_SIZE = 64
-DISTANCE_FUNCTION = 'euclidean'
+DISTANCE_FUNCTION = 'angular'
 NUM_TREES = 10
 
 IMAGES_DIR = 'static/images'
@@ -117,6 +117,9 @@ PRIMARY_INDEXES: List[Annoy] = []
 
 
 def load_primary_indexes(session: Session):
+    if not os.path.exists(INDEXES_DIR):
+        os.mkdir(INDEXES_DIR)
+
     global PRIMARY_INDEXES
     save_names = ['full_index'] + ['mask_{}_index'.format(i + 1) for i in range(NUM_MASKS)]
     save_paths = [os.path.join(INDEXES_DIR, n + ANNOY_EXT) for n in save_names]
@@ -185,19 +188,7 @@ def get_nns_by_category(session: Session, index: Annoy, query: FashionItem, resu
                         num_neighbors: int = 1000,
                         for_categories: List[str] = None) -> Dict[str, List[Tuple[FashionItem, float]]]:
     if for_categories is None:
-        for_categories = [
-            'tops',
-            'bottoms',
-            'jewellery',
-            'shoes',
-            'outerwear',
-            'scarves',
-            'sunglasses',
-            'bags',
-            'hats',
-            'all-body',
-            'accessories'
-        ]
+        for_categories = MERGED_CATEGORIES
 
     results: Dict[str, List[Tuple[FashionItem, float]]] = {c: [] for c in for_categories}
     num_filled = 0
@@ -206,7 +197,7 @@ def get_nns_by_category(session: Session, index: Annoy, query: FashionItem, resu
         if num_filled >= len(for_categories):
             break
 
-        c_list = results[item.semantic_category]
+        c_list = results[item.merged_category()]
         if len(c_list) < results_per_category:
             c_list.append((item, score))
             if len(c_list) >= results_per_category:

@@ -4,17 +4,18 @@
     <div class="creator-container">
         <div class="creator-wardrobe" id="wardrobe">
             {% for item in user_wardrobe %}
-                <img class="creator-item-sm" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
+                <img class="creator-item" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
             {% endfor %}
         </div>
         <div class="creator-outfit" id="outfit">
             {% for category in categories %}
-                <div class="outfit-category" data-category="{{ category }}">
-                </div>
+                <div class="category" data-category="{{ category }}"></div>
             {% endfor %}
         </div>
         <div class="creator-recommend" id="recommend">
-
+            {% for category in categories %}
+                <div class="category" data-category="{{ category }}"></div>
+            {% endfor %}
         </div>
     </div>
 

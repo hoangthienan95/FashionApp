@@ -1,3 +1,5 @@
+import os
+
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -32,6 +34,9 @@ class FashionItem(db.Model):
     mask_2_embedding = db.Column(db.String(2000), nullable=False)
     mask_3_embedding = db.Column(db.String(2000), nullable=False)
     mask_4_embedding = db.Column(db.String(2000), nullable=False)
+
+    def get_path(self) -> str:
+        return os.path.join('static/images', self.name + '.jpg')
 
 
 outfit_items = db.Table(

@@ -7,7 +7,7 @@ from flask import Flask, render_template
 
 import similarity
 import triplets
-from tables import db
+from tables import db, FashionItem
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -28,16 +28,19 @@ if __name__ == '__main__':
         db.create_all()
         similarity.load_all_items(db.session)
 
+with app.app_context():
+    similarity.load_primary_indexes(db.session)
+
 
 @app.route('/debug')
 def debug_similarity():
-    query = similarity.img_paths[random.randint(0, len(similarity.img_paths))]
+    query = db.session.query(FashionItem).filter(FashionItem.id == random.randint(0, 100000)).first()
 
     results: List[List[Tuple[str, float]]] = []
     category_results: List[Dict[str, List[Tuple[str, float]]]] = []
-    for index in [similarity.full_embeddings] + similarity.mask_embeddings:
-        results.append(similarity.get_nn_paths(index, query, 5))
-        category_results.append(similarity.get_nns_by_category(index, query, 1))
+    for index in similarity.PRIMARY_INDEXES:
+        results.append(similarity.get_nn_paths(db.session, index, query, 5))
+        category_results.append(similarity.get_nns_by_category(db.session, index, query, 1))
 
     return render_template('debug.html', query=query, results=results, category_results=category_results)
 

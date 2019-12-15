@@ -137,6 +137,7 @@ def outfits():
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
     return render_template('outfits.html',
                            username=user.username,
+                           user=user,
                            outfits=user.outfits)
 
 
@@ -242,6 +243,11 @@ def api_recommend():
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
     query_item = db.session.query(FashionItem).filter(FashionItem.id == request.json['item_id']).one()
 
+    if request.json['wardrobe'] == 'random':
+        request.json['wardrobe'] = random.choice((True, False))
+
+    results_per_category = random.randrange(1, 3)
+
     mask_i = random.randrange(1, 5)
     if request.json['wardrobe']:
         wardrobe_indexes = similarity.create_indexes(user.wardrobe_items)
@@ -250,7 +256,7 @@ def api_recommend():
             session=db.session,
             index=wardrobe_indexes[mask_i],
             query=query_item,
-            results_per_category=100,
+            results_per_category=results_per_category,
             num_neighbors=min(1000, len(user.wardrobe_items))
         )
     else:
@@ -258,7 +264,7 @@ def api_recommend():
             session=db.session,
             index=similarity.PRIMARY_INDEXES[mask_i],
             query=query_item,
-            results_per_category=1,
+            results_per_category=results_per_category,
             num_neighbors=min(1000, len(user.wardrobe_items))
         )
 
@@ -268,7 +274,8 @@ def api_recommend():
             results_json.append({
                 'id': item.id,
                 'path': item.get_path(),
-                'category': item.merged_category()
+                'category': item.merged_category(),
+                'in_wardrobe': item in user.wardrobe_items
             })
 
     return jsonify({

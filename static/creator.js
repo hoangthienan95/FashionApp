@@ -18,17 +18,20 @@ for (let el of document.querySelectorAll('#recommend > .category')) {
     recommendCategoryItems[cat] = [];
 }
 
-function createImg(itemId, itemPath, itemCategory) {
+function createImg(itemId, itemPath, itemCategory, inWardrobe) {
     const imgEl = document.createElement('img');
     imgEl.setAttribute('data-id', itemId);
     imgEl.setAttribute('data-category', itemCategory);
     imgEl.src = itemPath;
     imgEl.classList.add('creator-item');
+    if (!inWardrobe) {
+        imgEl.classList.add('not-in-wardrobe');
+    }
 
     return imgEl
 }
 
-function addItem(itemId, itemPath, itemCategory, itemDict, elementDict) {
+function addItem(itemId, itemPath, itemCategory, inWardrobe, itemDict, elementDict) {
     const catList = itemDict[itemCategory];
     if (catList.includes(itemId)) {
         return false;
@@ -36,7 +39,7 @@ function addItem(itemId, itemPath, itemCategory, itemDict, elementDict) {
 
     catList.push(itemId);
 
-    const imgEl = createImg(itemId, itemPath, itemCategory);
+    const imgEl = createImg(itemId, itemPath, itemCategory, inWardrobe);
     elementDict[itemCategory].appendChild(imgEl);
     return true
 }
@@ -45,8 +48,9 @@ function addOutfitItem(element) {
     const itemId = element.getAttribute('data-id');
     const itemPath = element.getAttribute('src');
     const itemCategory = element.getAttribute('data-category');
+    const inWardrobe = element.classList.contains('in-wardrobe');
 
-    if (addItem(itemId, itemPath, itemCategory, outfitCategoryItems, outfitCategoryElements)) {
+    if (addItem(itemId, itemPath, itemCategory, inWardrobe, outfitCategoryItems, outfitCategoryElements)) {
         loadRecommendations(itemId);
     }
 }
@@ -63,7 +67,6 @@ function removeOutfitItem(element) {
 
         element.remove();
     }
-    console.log(outfitCategoryItems);
 }
 
 document.getElementById('wardrobe').addEventListener('click', ev => {
@@ -84,14 +87,14 @@ document.getElementById('recommend').addEventListener('click', ev => {
     }
 });
 
-function addRecommendationItem(itemId, itemPath, itemCategory) {
-    addItem(itemId, itemPath, itemCategory, recommendCategoryItems, recommendCategoryElements);
+function addRecommendationItem(itemId, itemPath, itemCategory, inWardrobe) {
+    addItem(itemId, itemPath, itemCategory, inWardrobe, recommendCategoryItems, recommendCategoryElements);
 }
 
 async function loadRecommendations(itemId) {
     const body = {
         'item_id': itemId,
-        'wardrobe': false
+        'wardrobe': 'random'
     };
 
     const response = await fetch('api/recommend', {
@@ -107,7 +110,7 @@ async function loadRecommendations(itemId) {
         console.log(responseJson);
 
         for (let item of responseJson['results']) {
-            addRecommendationItem(item['id'], item['path'], item['category'])
+            addRecommendationItem(item['id'], item['path'], item['category'], item['in_wardrobe']);
         }
     }
 }

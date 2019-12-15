@@ -9,7 +9,7 @@
             <button class="outfit-delete">X</button>
         </div>
         {% for item in outfit.items %}
-            <img class="outfit-item" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
+            <img class="outfit-item{% if item not in user.wardrobe_items %} not-in-wardrobe{% endif %}" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
         {% endfor %}
         </div>
     {% endfor %}

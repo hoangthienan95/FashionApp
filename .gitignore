@@ -2,6 +2,7 @@
 data/
 static/images/
 config.json
+flask_session/
 
 # Python
 venv/

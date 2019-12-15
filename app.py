@@ -2,13 +2,19 @@ import json
 import random
 from typing import List, Tuple, Dict
 
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for, session
+from flask_session import Session
 
 import similarity
 import triplets
-from tables import db, FashionItem
+from forms import LogInForm, SignUpForm
+from tables import db, FashionItem, User
 
 app = Flask(__name__)
+
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 with open('config.json') as config_file:
     db_json = json.load(config_file)['database']
@@ -31,19 +37,57 @@ with app.app_context():
     similarity.load_primary_indexes(db.session)
 
 
+USER_ID_KEY = 'user_id'
+
+
+@app.route('/')
+def index():
+    if session[USER_ID_KEY] is not None:
+        return redirect(url_for('outfits'))
+
+    return redirect(url_for('login'))
+
+
 @app.route('/login')
 def login():
-    pass
+    form = LogInForm()
+
+    if form.validate_on_submit():
+        user = db.session.query(User).filter(User.username == form.username).first()
+        if user is not None:
+            session[USER_ID_KEY] = user.id
+            return redirect(url_for('index'))
+
+        form.username.errors.append('Unknown user.')
+
+    return render_template('', form=form)
 
 
 @app.route('/logout')
 def logout():
-    pass
+    if USER_ID_KEY in session:
+        session.pop(USER_ID_KEY)
+
+    return redirect(url_for('/'))
 
 
 @app.route('/signup')
 def signup():
-    pass
+    form = SignUpForm()
+
+    if form.validate_on_submit():
+        user = db.session.query(User).filter(User.username == form.username).first()
+        if user is None:
+            user = User(username=form.username)
+            db.session.add(user)
+            db.commit()
+
+            session[USER_ID_KEY] = user.id
+            return redirect(url_for('index'))
+
+        form.username.errors.append('That username is taken.')
+
+    return render_template('', form=form)
 
 
 @app.route('/wardrobe')
@@ -92,9 +136,9 @@ def debug_similarity():
 
     results: List[List[Tuple[str, float]]] = []
     category_results: List[Dict[str, List[Tuple[str, float]]]] = []
-    for index in similarity.PRIMARY_INDEXES:
-        results.append(similarity.get_nn_paths(db.session, index, query, 5))
-        category_results.append(similarity.get_nns_by_category(db.session, index, query, 1))
+    for ind in similarity.PRIMARY_INDEXES:
+        results.append(similarity.get_nn_paths(db.session, ind, query, 5))
+        category_results.append(similarity.get_nns_by_category(db.session, ind, query, 1))
 
     return render_template('debug.html', query=query, results=results, category_results=category_results)
 

@@ -11,17 +11,17 @@ import triplets
 from forms import LogInForm, SignUpForm
 from tables import db, FashionItem, User, Outfit
 
-app = Flask(__name__)
+application = Flask(__name__)
 
-app.config['SESSION_TYPE'] = 'filesystem'
-Session(app)
+application.config['SESSION_TYPE'] = 'filesystem'
+Session(application)
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 with open('config.json') as config_file:
     config_json = json.load(config_file)
 
     db_json = config_json['database']
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{}:{}@{}:{}/{}'.format(
+    application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{}:{}@{}:{}/{}'.format(
         db_json['user'],
         db_json['password'],
         db_json['host'],
@@ -29,22 +29,22 @@ with open('config.json') as config_file:
         db_json['database']
     )
 
-    app.config['SECRET_KEY'] = config_json['secret_key']
-db.init_app(app)
+    application.config['SECRET_KEY'] = config_json['secret_key']
+db.init_app(application)
 
-with app.app_context():
+with application.app_context():
     db.create_all()
 
     if __name__ == '__main__':
         similarity.load_all_items(db.session)
 
-with app.app_context():
+with application.app_context():
     similarity.load_primary_indexes(db.session)
 
 USER_ID_KEY = 'user_id'
 
 
-@app.route('/')
+@application.route('/')
 def index():
     if USER_ID_KEY in session:
         return redirect(url_for('wardrobe'))
@@ -52,7 +52,7 @@ def index():
     return redirect(url_for('login'))
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@application.route('/login', methods=['GET', 'POST'])
 def login():
     form = LogInForm()
 
@@ -67,7 +67,7 @@ def login():
     return render_template('login.html', form=form)
 
 
-@app.route('/logout')
+@application.route('/logout')
 def logout():
     if USER_ID_KEY in session:
         session.pop(USER_ID_KEY)
@@ -75,7 +75,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/signup', methods=['GET', 'POST'])
+@application.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignUpForm()
 
@@ -99,7 +99,7 @@ def item_from_path(path: str) -> FashionItem:
     return db.session.query(FashionItem).filter(FashionItem.name == item_name).one()
 
 
-@app.route('/wardrobe')
+@application.route('/wardrobe')
 def wardrobe():
     if USER_ID_KEY not in session:
         return redirect('/')
@@ -110,7 +110,7 @@ def wardrobe():
                            user_wardrobe=user.wardrobe_items)
 
 
-@app.route('/randomize-wardrobe')
+@application.route('/randomize-wardrobe')
 def randomize_wardrobe():
     if USER_ID_KEY not in session:
         return redirect('/')
@@ -129,7 +129,7 @@ def randomize_wardrobe():
     return redirect(url_for('wardrobe'))
 
 
-@app.route('/outfits')
+@application.route('/outfits')
 def outfits():
     if USER_ID_KEY not in session:
         return redirect('/')
@@ -141,7 +141,7 @@ def outfits():
                            outfits=user.outfits)
 
 
-@app.route('/creator')
+@application.route('/creator')
 def outfit_creator():
     if USER_ID_KEY not in session:
         return redirect('/')
@@ -153,7 +153,7 @@ def outfit_creator():
                            categories=similarity.MERGED_CATEGORIES)
 
 
-@app.route('/api/add_wardrobe_item', methods=['POST'])
+@application.route('/api/add_wardrobe_item', methods=['POST'])
 def api_add_wardrobe_item():
     if USER_ID_KEY not in session:
         abort(403)
@@ -173,7 +173,7 @@ def api_add_wardrobe_item():
     })
 
 
-@app.route('/api/remove_wardrobe_item', methods=['POST'])
+@application.route('/api/remove_wardrobe_item', methods=['POST'])
 def api_remove_wardrobe_item():
     if USER_ID_KEY not in session:
         abort(403)
@@ -193,7 +193,7 @@ def api_remove_wardrobe_item():
     })
 
 
-@app.route('/api/create_outfit', methods=['POST'])
+@application.route('/api/create_outfit', methods=['POST'])
 def api_create_outfit():
     if USER_ID_KEY not in session:
         abort(403)
@@ -216,7 +216,7 @@ def api_create_outfit():
     })
 
 
-@app.route('/api/delete_outfit', methods=['POST'])
+@application.route('/api/delete_outfit', methods=['POST'])
 def api_delete_outfit():
     if USER_ID_KEY not in session:
         abort(403)
@@ -235,7 +235,7 @@ def api_delete_outfit():
     })
 
 
-@app.route('/api/recommend', methods=['POST'])
+@application.route('/api/recommend', methods=['POST'])
 def api_recommend():
     if USER_ID_KEY not in session:
         abort(403)
@@ -283,7 +283,7 @@ def api_recommend():
     })
 
 
-@app.route('/debug')
+@application.route('/debug')
 def debug_similarity():
     query = db.session.query(FashionItem).filter(FashionItem.id == random.randint(0, 100000)).first()
 
@@ -296,6 +296,6 @@ def debug_similarity():
     return render_template('debug.html', query=query, results=results, category_results=category_results)
 
 
-@app.route('/triplets')
+@application.route('/triplets')
 def view_triplets():
     return render_template('triplets.html', triplets=triplets.get_triplets(1000))

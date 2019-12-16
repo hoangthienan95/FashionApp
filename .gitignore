@@ -3,6 +3,7 @@ data/
 static/images/
 config.json
 flask_session/
+.ebextensions/
 deploy.sh
 
 # Python

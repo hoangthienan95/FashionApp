@@ -50,7 +50,7 @@ body {
 }
 
 .light-dark {
-    color: #4A5059;
+    color: #747D8C;
 }
 
 .light {
@@ -197,6 +197,10 @@ body {
 
 .wardrobe {
     padding: 50px;
+}
+
+.wardrobe-header {
+    margin: 0 0 50px 5px;
 }
 
 .wardrobe-category {
@@ -376,6 +380,10 @@ body {
 
 .outfits {
     margin: 50px;
+}
+
+.outfits-header {
+    margin: 0 0 30px 5px;
 }
 
 .outfit {

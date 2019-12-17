@@ -2,6 +2,7 @@
 {% block title %}Wardrobe{% endblock %}
 {% block page_content %}
     <div class="wardrobe">
+    <div class="wardrobe-header text-xl dark weight-bold">Wardrobe</div>
     {% if user_wardrobe|length == 0 %}
         <div class="empty-wardrobe-container">
             <div class="empty-wardrobe-text text-m light-dark weight-medium">Wardrobe Empty</div>

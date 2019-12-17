@@ -81,47 +81,27 @@ body {
 
 .nav {
     width: auto;
-    height: 60px;
+    height: 70px;
 
     text-align: center;
-    background-color: darkslategray;
+    background-color: #3F4F7F;
 }
 
 .nav-items {
-    padding-top: 20px;
-    padding-right: 20px;
+    padding: 20px;
 }
 
 .nav-item {
-    margin-right: 20px;
-
-    color: white;
+    margin-right: 30px;
     text-decoration: none;
-
-    font-weight: bold;
-    font-size: 20px;
-}
-
-.nav-link {
-}
-.nav-link:hover {
-    color: deepskyblue;
 }
 
 .nav-info {
     float: left;
-    margin-left: 20px;
-
-    color: white;
-    font-weight: normal;
 }
 
 .nav-action {
     float: right;
-    color: orange;
-}
-.nav-action:hover {
-    color: darkorange;
 }
 
 
@@ -152,6 +132,9 @@ body {
 .btn.btn-primary {
     background-color: #6283E5;
 }
+.btn.btn-secondary {
+    background-color: #FF9544;
+}
 .btn.btn-danger {
     background-color: #FF4F4C;
 }
@@ -171,11 +154,17 @@ body {
 .link-btn:hover {
     filter: brightness(1.5);
 }
+.link-btn.darken:hover {
+    filter: brightness(0.7);
+}
 .link-btn:active {
     transform: scale(0.95);
 }
 .link-btn.btn-primary {
     color: #6283E5;
+}
+.link-btn.btn-secondary {
+    color: #FF9544;
 }
 .link-btn.btn-danger {
     color: #FF4F4C;

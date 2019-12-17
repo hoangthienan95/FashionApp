@@ -1,20 +1,24 @@
 {% extends 'nav_base.html' %}
 {% block title %}Wardrobe{% endblock %}
 {% block page_content %}
-    <div class="wardrobe-items">
+    <div class="wardrobe">
     {% if user_wardrobe|length == 0 %}
         <div class="empty-wardrobe-container">
             <div>Wardrobe Empty</div>
             <a class="btn" href="{{ url_for('randomize_wardrobe') }}">Randomize</a>
         </div>
     {% endif %}
-    {% for item in user_wardrobe %}
-        <div class="wardrobe-item" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
-            <div class="wardrobe-info">
-                <span class="wardrobe-text">{{ item.id }}</span>
-                <button class="wardrobe-remove">X</button>
+    {% for cat, items in wardrobe_by_category.items() %}
+        <div class="wardrobe-category">
+            <div class="wardrobe-category-title text-l dark weight-bold">{{ display_categories[loop.index0] }}</div>
+            <div class="wardrobe-category-items">
+                {% for item in items %}
+                    <div class="wardrobe-item" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
+                        <img class="wardrobe-img" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
+                        <button class="wardrobe-remove link-btn btn-danger text-m weight-bold">X</button>
+                    </div>
+                {% endfor %}
             </div>
-            <img class="wardrobe-img" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
         </div>
     {% endfor %}
     </div>

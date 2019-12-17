@@ -107,14 +107,6 @@ def by_category(items: List[FashionItem]) -> Dict[str, FashionItem]:
     return items_by_category
 
 
-def fancy_str(s: str):
-    return s.replace('_', ' ').replace('-', ' ').title()
-
-
-def fancy_strs(s_list: List[str]):
-    return [fancy_str(s) for s in s_list]
-
-
 @application.route('/wardrobe')
 def wardrobe():
     if USER_ID_KEY not in session:
@@ -124,7 +116,8 @@ def wardrobe():
     return render_template('wardrobe.html',
                            username=user.username,
                            user_wardrobe=user.wardrobe_items,
-                           wardrobe_by_category=by_category(user.wardrobe_items))
+                           wardrobe_by_category=by_category(user.wardrobe_items),
+                           display_categories=similarity.MERGED_CATEGORIES_DISPLAY)
 
 
 @application.route('/randomize-wardrobe')
@@ -169,7 +162,7 @@ def outfit_creator():
                            user_wardrobe=user.wardrobe_items,
                            wardrobe_by_category=by_category(user.wardrobe_items),
                            categories=similarity.MERGED_CATEGORIES,
-                           display_categories=fancy_strs(similarity.MERGED_CATEGORIES))
+                           display_categories=similarity.MERGED_CATEGORIES_DISPLAY)
 
 
 @application.route('/api/add_wardrobe_item', methods=['POST'])

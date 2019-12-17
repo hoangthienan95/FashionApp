@@ -32,7 +32,15 @@ MERGED_CATEGORIES = [
     'bags',
     'accessories'
 ]
-
+MERGED_CATEGORIES_DISPLAY = [
+    'Hats',
+    'Full-Body',
+    'Tops',
+    'Bottoms',
+    'Shoes',
+    'Bags',
+    'Accessories'
+]
 
 def load_all_items(session: Session):
     print('Loading all items.')

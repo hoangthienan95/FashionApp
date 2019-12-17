@@ -167,39 +167,66 @@ body {
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
+
+    background-color: #1E2833;
 }
 
 .creator-wardrobe {
     width: 20%;
     height: 100%;
 
-    padding: 20px 10px 0;
+    padding: 20px 10px 0 20px;
     box-sizing: border-box;
-    background-color: lightslategray;
     text-align: center;
 
     overflow: scroll;
 }
 
+.creator-wardrobe-title {
+    color: white;
+    font-size: 40px;
+
+    margin-bottom: 10px;
+}
+
+.creator-wardrobe-category {
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    /*padding: 5px 0;*/
+    margin-bottom: -1px;
+}
+.creator-wardrobe-category:first-of-type {
+    border-radius: 5px 5px 0 0;
+}
+.creator-wardrobe-category:last-of-type {
+    border-radius: 0 0 5px 5px;
+}
+
 .creator-wardrobe-category-name {
     font-weight: normal;
-    font-size: 30px;
+    font-size: 25px;
 
     color: white;
     cursor: pointer;
+
+    background-color: #3D444C;
+    padding: 10px 0;
+}
+.creator-wardrobe-category:first-of-type > .creator-wardrobe-category-name {
+    border-radius: 5px 5px 0 0;
+}
+.creator-wardrobe-category:last-of-type > .creator-wardrobe-category-name {
+    border-radius: 0 0 5px 5px;
 }
 .creator-wardrobe-category-name:hover {
     text-decoration: underline;
 }
 
-.creator-wardrobe-category {
-    border: 1px solid black;
-    border-radius: 10px;
-    margin-bottom: 5px;
-}
 .creator-wardrobe-category-items {
+    padding: 10px 0;
+    background-color: #1E2833;
 }
 .creator-wardrobe-category-items.hidden {
+    padding: 0;
     height: 0;
     overflow: hidden;
 }
@@ -216,8 +243,9 @@ body {
 
     width: 30%;
     height: 100%;
-    background-color: lightslategray;
     padding: 10px 20px 0;
+
+    background-color: #3D444C;
 }
 
 .recommend-header {

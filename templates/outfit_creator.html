@@ -3,16 +3,19 @@
 {% block page_content %}
     <div class="creator-container">
         <div class="creator-wardrobe" id="wardrobe">
-        {% for cat, items in wardrobe_by_category.items() %}
-            <div class="creator-wardrobe-category">
-                <div class="creator-wardrobe-category-name">{{ cat }}</div>
-                <div class="creator-wardrobe-category-items hidden">
-                    {% for item in items %}
-                        <img class="creator-item" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
-                    {% endfor %}
-                </div>
+            <div class="creator-wardrobe-title">Wardrobe</div>
+            <div class="creator-wardrobe-categories">
+                {% for cat, items in wardrobe_by_category.items() %}
+                   <div class="creator-wardrobe-category">
+                       <div class="creator-wardrobe-category-name">{{ display_categories[loop.index0] }}</div>
+                       <div class="creator-wardrobe-category-items hidden">
+                           {% for item in items %}
+                               <img class="creator-item" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
+                           {% endfor %}
+                       </div>
+                   </div>
+               {% endfor %}
             </div>
-        {% endfor %}
         </div>
         <div class="creator-outfit" id="outfit">
             {% for category in categories %}

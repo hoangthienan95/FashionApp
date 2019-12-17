@@ -31,7 +31,7 @@ function createImg(itemId, itemPath, itemCategory, inWardrobe) {
     return imgEl
 }
 
-function addItem(itemId, itemPath, itemCategory, inWardrobe, itemDict, elementDict) {
+function addItem(itemId, itemPath, itemCategory, inWardrobe, itemDict, elementDict, scroll = false) {
     const catList = itemDict[itemCategory];
     if (catList.includes(itemId)) {
         return false;
@@ -39,8 +39,14 @@ function addItem(itemId, itemPath, itemCategory, inWardrobe, itemDict, elementDi
 
     catList.push(itemId);
 
+    const catEl = elementDict[itemCategory];
     const imgEl = createImg(itemId, itemPath, itemCategory, inWardrobe);
-    elementDict[itemCategory].appendChild(imgEl);
+
+    catEl.appendChild(imgEl);
+    if (scroll) {
+        catEl.scrollTo(catEl.scrollWidth, 0);
+    }
+
     return true
 }
 
@@ -88,7 +94,7 @@ document.getElementById('recommend').addEventListener('click', ev => {
 });
 
 function addRecommendationItem(itemId, itemPath, itemCategory, inWardrobe) {
-    addItem(itemId, itemPath, itemCategory, inWardrobe, recommendCategoryItems, recommendCategoryElements);
+    addItem(itemId, itemPath, itemCategory, inWardrobe, recommendCategoryItems, recommendCategoryElements, true);
 }
 
 async function loadRecommendations(itemId) {

@@ -1,0 +1,21 @@
+{% extends 'nav_base.html' %}
+{% block title %}Log In{% endblock %}
+{% block page_content %}
+    <div class="form-container">
+        <div class="text-xl dark weight-medium">{{ action_text }}</div>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <div class="form-input-container">
+                {{ form.username(size=30, class='form-input text-m dark weight-medium', placeholder='Username') }}
+                {% if form.username.errors|length > 0 %}
+                    <div class="form-errors">
+                        {% for error in form.username.errors %}
+                            <div class="text-s danger weight-medium">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            {{ form.submit(class='form-submit btn btn-primary text-m light weight-medium') }}
+        </form>
+    </div>
+{% endblock %}

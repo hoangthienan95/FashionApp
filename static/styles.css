@@ -4,6 +4,11 @@ body {
 }
 
 /* ------------------------------ */
+.text-xl {
+    font-size: 60px;
+    font-weight: 500;
+}
+
 .text-l {
     font-size: 40px;
     font-weight: 500;
@@ -52,6 +57,10 @@ body {
     color: #F2F7FF;
 }
 
+.danger {
+    color: #FF4F4C;
+}
+
 .highlight {
     color: #6283E5;
 }
@@ -64,17 +73,19 @@ body {
     margin-top: 50px;
 }
 
+.form-input-container {
+    margin: 30px 0;
+}
+
 .form-input {
-    margin-bottom: 20px;
+    padding: 5px;
+
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.form-error {
-    color: red;
+.form-errors {
     margin-top: 10px;
-}
-
-.form-submit {
-    border: none;
 }
 
 /* ------------------------------ */
@@ -174,8 +185,14 @@ body {
 /* ------------------------------ */
 
 .empty-wardrobe-container {
+    margin-top: 50px;
+
     width: auto;
     text-align: center;
+}
+
+.empty-wardrobe-text {
+    margin-bottom: 10px;
 }
 
 .wardrobe {

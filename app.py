@@ -64,7 +64,7 @@ def login():
 
         form.username.errors.append('Unknown user.')
 
-    return render_template('login.html', form=form)
+    return render_template('user_form.html', form=form, action_text='Log In')
 
 
 @application.route('/logout')
@@ -91,7 +91,7 @@ def signup():
 
         form.username.errors.append('That username is taken.')
 
-    return render_template('signup.html', form=form)
+    return render_template('user_form.html', form=form, action_text='Sign Up')
 
 
 def item_from_path(path: str) -> FashionItem:

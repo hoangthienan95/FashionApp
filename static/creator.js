@@ -48,7 +48,7 @@ function addOutfitItem(element) {
     const itemId = element.getAttribute('data-id');
     const itemPath = element.getAttribute('src');
     const itemCategory = element.getAttribute('data-category');
-    const inWardrobe = element.classList.contains('in-wardrobe');
+    const inWardrobe = !element.classList.contains('not-in-wardrobe');
 
     if (addItem(itemId, itemPath, itemCategory, inWardrobe, outfitCategoryItems, outfitCategoryElements)) {
         loadRecommendations(itemId);

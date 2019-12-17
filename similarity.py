@@ -25,9 +25,9 @@ CATEGORIES_FILE_PATH = 'data/categories.csv'
 
 MERGED_CATEGORIES = [
     'hats',
+    'all-body',
     'tops',
     'bottoms',
-    'all-body',
     'shoes',
     'bags',
     'accessories'

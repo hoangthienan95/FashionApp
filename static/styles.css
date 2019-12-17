@@ -1,9 +1,45 @@
 body {
-    font-family: sans-serif;
+    font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     margin: 0;
 }
 
+/* ------------------------------ */
+.text-l {
+    font-size: 40px;
+    font-weight: 500;
+}
 
+.text-ml {
+    font-size: 30px;
+    font-weight: normal;
+}
+
+.text-m {
+    font-size: 25px;
+    font-weight: normal;
+}
+
+.text-s {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.dark {
+    color: #212428;
+}
+
+.light-dark {
+    color: #4A5059;
+    font-weight: 500;
+}
+
+.light {
+    color: #F2F7FF;
+}
+
+.highlight {
+    color: #6283E5;
+}
 /* ------------------------------ */
 
 
@@ -78,27 +114,31 @@ body {
 
 
 .btn {
+    border: none;
+
     display: inline-block;
     text-align: center;
     text-decoration: none;
-    font-weight: bold;
-    color: white;
 
-    font-size: 20px;
-    padding: 10px 40px;
-    line-height: 40px;
+    padding: 15px 40px;
+    line-height: 100%;
 
-    background-color: cornflowerblue;
-    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
 
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-}
-.btn:hover {
-    background-color: deepskyblue;
     cursor: pointer;
 }
+.btn:hover, .btn:active {
+    filter: brightness(0.8);
+}
 .btn:active {
-    background-color: dodgerblue;
+    transform: scale(0.95);
+}
+.btn.btn-primary {
+    background-color: #6283E5;
+}
+.btn.btn-danger {
+    background-color: #E8413E;
 }
 
 /* ------------------------------ */
@@ -120,7 +160,6 @@ body {
 
 .wardrobe-img {
     width: 100px;
-
     border-radius: 5px;
 }
 
@@ -168,14 +207,14 @@ body {
     justify-content: center;
     align-items: flex-start;
 
-    background-color: #1E2833;
+    background-color: white;
 }
 
 .creator-wardrobe {
     width: 20%;
     height: 100%;
 
-    padding: 20px 10px 0 20px;
+    padding: 20px;
     box-sizing: border-box;
     text-align: center;
 
@@ -183,15 +222,12 @@ body {
 }
 
 .creator-wardrobe-title {
-    color: white;
-    font-size: 40px;
-
     margin-bottom: 10px;
 }
 
 .creator-wardrobe-category {
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    /*padding: 5px 0;*/
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: #F2F7FF;
     margin-bottom: -1px;
 }
 .creator-wardrobe-category:first-of-type {
@@ -202,20 +238,8 @@ body {
 }
 
 .creator-wardrobe-category-name {
-    font-weight: normal;
-    font-size: 25px;
-
-    color: white;
     cursor: pointer;
-
-    background-color: #3D444C;
-    padding: 10px 0;
-}
-.creator-wardrobe-category:first-of-type > .creator-wardrobe-category-name {
-    border-radius: 5px 5px 0 0;
-}
-.creator-wardrobe-category:last-of-type > .creator-wardrobe-category-name {
-    border-radius: 0 0 5px 5px;
+    padding: 15px 0;
 }
 .creator-wardrobe-category-name:hover {
     text-decoration: underline;
@@ -223,7 +247,7 @@ body {
 
 .creator-wardrobe-category-items {
     padding: 10px 0;
-    background-color: #1E2833;
+    background-color: white;
 }
 .creator-wardrobe-category-items.hidden {
     padding: 0;
@@ -238,32 +262,28 @@ body {
     text-align: center;
 }
 
-.creator-recommend {
+.creator-recommend-container {
     box-sizing: border-box;
 
     width: 30%;
-    height: 100%;
+    padding: 20px;
+}
+
+.creator-recommend {
     padding: 10px 20px 0;
 
-    background-color: #3D444C;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background-color: #F2F7FF;
 }
-
-.recommend-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
-    margin-bottom: 5px;
-}
-
 
 .creator-item {
     width: 65px;
     margin: 3px;
 
+    border: 2px solid rgba(0, 0, 0, 0.2);
     border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
 
     cursor: pointer;
 }
@@ -271,8 +291,34 @@ body {
     filter: brightness(0.7);
 }
 .creator-item.not-in-wardrobe {
-    box-sizing: border-box;
-    border: 3px solid cornflowerblue;
+    border: 3px solid #6283E5;
+}
+
+
+
+.recommend-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.creator-outfit-name {
+    flex-grow: 1;
+    min-width: 50px;
+
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
+    margin-right: 5px;
+    padding: 10px;
+}
+
+.creator-submit {
+    border: none;
+    flex-grow: 0;
 }
 
 .category {
@@ -286,20 +332,6 @@ body {
 .category:first-child {
     margin-top: 50px;
 }
-
-.creator-outfit-name {
-    font-size: 40px;
-    border: none;
-    border-radius: 5px;
-
-    margin-right: 5px;
-    padding: 5px;
-}
-
-.creator-submit {
-    border: none;
-}
-
 
 /* ------------------------------ */
 

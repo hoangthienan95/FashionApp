@@ -11,7 +11,7 @@ body {
 
 .text-ml {
     font-size: 30px;
-    font-weight: normal;
+    font-weight: 500;
 }
 
 .text-m {
@@ -24,13 +24,28 @@ body {
     font-weight: normal;
 }
 
+.weight-bold {
+    font-weight: bold;
+}
+
+.weight-medium {
+    font-weight: 500;
+}
+
+.weight-normal {
+    font-weight: normal;
+}
+
+.weight-thin {
+    font-weight: lighter;
+}
+
 .dark {
     color: #212428;
 }
 
 .light-dark {
     color: #4A5059;
-    font-weight: 500;
 }
 
 .light {
@@ -140,6 +155,32 @@ body {
 .btn.btn-danger {
     background-color: #E8413E;
 }
+
+.link-btn {
+    border: none;
+    padding: 0;
+
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+
+    background-color: transparent;
+
+    cursor: pointer;
+}
+.link-btn:hover {
+    filter: brightness(1.5);
+}
+.link-btn:active {
+    transform: scale(0.95);
+}
+.link-btn.btn-primary {
+    color: #6283E5;
+}
+.link-btn.btn-danger {
+    color: #E8413E;
+}
+
 
 /* ------------------------------ */
 
@@ -336,7 +377,7 @@ body {
 /* ------------------------------ */
 
 .outfits {
-    margin: 50px 50px 0;
+    margin: 50px;
 }
 
 .outfit {
@@ -344,56 +385,30 @@ body {
     max-width: 100%;
     margin-bottom: 20px;
 
-    background-color: lightslategray;
+    background-color: #F2F7FF;
     padding: 15px;
 
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .outfit-header {
-    margin-left: 15px;
+    margin: 0 15px 20px;
 
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.outfit-name {
-    display: inline-block;
-    font-size: 30px;
-    font-weight: 500;
-    color: white;
-}
-
-.outfit-delete {
-    border: none;
-    color: white;
-    background-color: indianred;
-    margin-right: 15px;
-
-    font-size: 20px;
-
-    border-radius: 10px;
-    padding: 5px 10px;
-
-    cursor: pointer;
-}
-.outfit-delete:hover {
-    background-color: orangered;
-}
-.outfit-delete:active {
-    background-color: red;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 .outfit-item {
     width: 100px;
     margin: 10px;
 
+    border: 3px solid rgba(0, 0, 0, 0.2);
     border-radius: 5px;
+    box-sizing: border-box;
 }
 .outfit-item.not-in-wardrobe {
-    box-sizing: border-box;
-    border: 6px solid orangered;
+    border: 3px solid #6283E5;
 }

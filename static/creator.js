@@ -148,3 +148,27 @@ async function submitOutfit() {
 document.getElementById('create-button').addEventListener('click', ev => {
     submitOutfit();
 });
+
+
+let wardrobeCategoryItems = document.querySelectorAll('.creator-wardrobe-category-items');
+
+function collapseExcept(element) {
+    if (element.classList.contains('hidden')){
+        for (let el of wardrobeCategoryItems) {
+            if (el !== element) {
+                el.classList.add('hidden');
+            }
+        }
+        element.classList.remove('hidden');
+    }
+    else {
+        element.classList.add('hidden')
+    }
+}
+
+for (let el of wardrobeCategoryItems) {
+    let name = el.parentElement.querySelector('.creator-wardrobe-category-name');
+    name.addEventListener('click', evt => {
+        collapseExcept(el);
+    });
+}

@@ -99,21 +99,24 @@ def item_from_path(path: str) -> FashionItem:
     return db.session.query(FashionItem).filter(FashionItem.name == item_name).one()
 
 
+def by_category(items: List[FashionItem]) -> Dict[str, FashionItem]:
+    items_by_category = {k: [] for k in similarity.MERGED_CATEGORIES}
+    for item in items:
+        items_by_category[item.merged_category()].append(item)
+
+    return items_by_category
+
+
 @application.route('/wardrobe')
 def wardrobe():
     if USER_ID_KEY not in session:
         return redirect('/')
 
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
-
-    items_by_category = {k: [] for k in similarity.MERGED_CATEGORIES}
-    for item in user.wardrobe_items:
-        items_by_category[item.merged_category()].append(item)
-
     return render_template('wardrobe.html',
                            username=user.username,
                            user_wardrobe=user.wardrobe_items,
-                           wardrobe_by_category=items_by_category)
+                           wardrobe_by_category=by_category(user.wardrobe_items))
 
 
 @application.route('/randomize-wardrobe')
@@ -156,6 +159,7 @@ def outfit_creator():
     return render_template('outfit_creator.html',
                            username=user.username,
                            user_wardrobe=user.wardrobe_items,
+                           wardrobe_by_category=by_category(user.wardrobe_items),
                            categories=similarity.MERGED_CATEGORIES)
 
 

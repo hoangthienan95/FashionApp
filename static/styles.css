@@ -173,13 +173,35 @@ body {
     width: 20%;
     height: 100%;
 
-    padding-top: 20px;
+    padding: 20px 10px 0;
     box-sizing: border-box;
-
     background-color: lightslategray;
+    text-align: center;
 
     overflow: scroll;
-    text-align: center;
+}
+
+.creator-wardrobe-category-name {
+    font-weight: normal;
+    font-size: 30px;
+
+    color: white;
+    cursor: pointer;
+}
+.creator-wardrobe-category-name:hover {
+    text-decoration: underline;
+}
+
+.creator-wardrobe-category {
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+.creator-wardrobe-category-items {
+}
+.creator-wardrobe-category-items.hidden {
+    height: 0;
+    overflow: hidden;
 }
 
 .creator-outfit {

@@ -105,9 +105,15 @@ def wardrobe():
         return redirect('/')
 
     user = db.session.query(User).filter(User.id == session[USER_ID_KEY]).one()
+
+    items_by_category = {k: [] for k in similarity.MERGED_CATEGORIES}
+    for item in user.wardrobe_items:
+        items_by_category[item.merged_category()].append(item)
+
     return render_template('wardrobe.html',
                            username=user.username,
-                           user_wardrobe=user.wardrobe_items)
+                           user_wardrobe=user.wardrobe_items,
+                           wardrobe_by_category=items_by_category)
 
 
 @application.route('/randomize-wardrobe')

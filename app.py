@@ -1,6 +1,7 @@
 import json
 import os
 import random
+import sys
 from typing import List, Tuple, Dict, NamedTuple
 
 from flask import Flask, render_template, redirect, url_for, session, request, jsonify, abort
@@ -11,13 +12,30 @@ import triplets
 from forms import LogInForm, SignUpForm
 from tables import db, FashionItem, User, Outfit
 
+CONFIG_FILE_PATH = 'config.json'
+
+if not os.path.exists(CONFIG_FILE_PATH):
+    with open(CONFIG_FILE_PATH, 'w') as config_file:
+        json.dump({
+            'secret_key': '',
+            'database': {
+                'user': '',
+                'password': '',
+                'host': '',
+                'port': '3306',
+                'database': ''
+            }
+        }, config_file, indent=2)
+    print('Please fill out config.json')
+    sys.exit(0)
+
 application = Flask(__name__)
 
 application.config['SESSION_TYPE'] = 'filesystem'
 Session(application)
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-with open('config.json') as config_file:
+with open(CONFIG_FILE_PATH) as config_file:
     config_json = json.load(config_file)
 
     db_json = config_json['database']

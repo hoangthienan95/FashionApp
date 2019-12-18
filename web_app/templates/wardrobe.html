@@ -1,0 +1,29 @@
+{% extends 'nav_base.html' %}
+{% block title %}Wardrobe{% endblock %}
+{% block page_content %}
+    <div class="wardrobe">
+    <div class="wardrobe-header text-xl dark weight-bold">Wardrobe</div>
+    {% if user_wardrobe|length == 0 %}
+        <div class="empty-wardrobe-container">
+            <div class="empty-wardrobe-text text-m light-dark weight-medium">Wardrobe Empty</div>
+            <a class="btn btn-primary text-m light weight-medium" href="{{ url_for('randomize_wardrobe') }}">Randomize</a>
+        </div>
+    {% else %}
+        {% for cat, items in wardrobe_by_category.items() %}
+            <div class="wardrobe-category">
+                <div class="wardrobe-category-title text-l dark weight-bold">{{ display_categories[loop.index0] }}</div>
+                <div class="wardrobe-category-items">
+                    {% for item in items %}
+                        <div class="wardrobe-item" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
+                            <img class="wardrobe-img" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
+                            <button class="wardrobe-remove link-btn btn-danger text-m weight-bold">X</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    </div>
+
+    <script src="/static/wardrobe.js"></script>
+{% endblock %}

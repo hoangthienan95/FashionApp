@@ -1,0 +1,20 @@
+{% extends 'nav_base.html' %}
+{% block title %}Wardrobe{% endblock %}
+{% block page_content %}
+    <div class="outfits">
+    <div class="outfits-header text-xl dark weight-bold">Outfits</div>
+    {% for outfit in outfits %}
+        <div class="outfit" data-id="{{ outfit.id }}">
+            <div class="outfit-header">
+                <div class="text-l dark weight-bold">{{ outfit.name|escape }}</div>
+                <button class="outfit-delete link-btn btn-danger text-m light weight-medium">Delete</button>
+            </div>
+            {% for item in outfit.items %}
+                <img class="outfit-item{% if item not in user.wardrobe_items %} not-in-wardrobe{% endif %}" src="{{ item.get_path() }}" data-id="{{ item.id }}" data-category="{{ item.merged_category() }}">
+            {% endfor %}
+        </div>
+    {% endfor %}
+    </div>
+
+    <script src="/static/outfits.js"></script>
+{% endblock %}

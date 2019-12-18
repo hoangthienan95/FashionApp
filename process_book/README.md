@@ -134,7 +134,9 @@ Each person on our team made sketches to show the core functionalities and flow 
 
 ![](images/design_1.jpeg)
 We decided to make our app to have three main pages: a wardrobe page that displays all the items in our database, an outfit creator page that helps the users to choose items from their current wardrobe to create sets of outfits based on the recommendations made by our algorithm and a saved outfits page where the users could have a preview of the outfits they created, and be able to change or delete them.
-![](images/sketch_2.jpg)
+
+
+![](images/sketch_2.JPG)
 
 ## First version
 The first version of UI design we implemented by bootstrap studio is as follows:

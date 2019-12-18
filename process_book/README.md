@@ -37,8 +37,8 @@ any items in common with outfits in the training set (although some items in
 the test set may be present in outfits in the validation set). This reduces the data to 32,140 outfits and 175,485 items, 16,995 of which are used for training and 15,145 for testing and validation.
 * We generated 1,552,182 triplets from the data. To generate the triplets, we first take 3 items that go together in an outfit, then replace the third item with a random item of same category from a different outfit. This makes the first two item a positive training example (compatible items), while the third item in the triplet is the negative training example (incompatible item)
 
-
-#Data modeling
+---
+# Data modeling
 
 ## EDA
 Below are some plots to gain insights into our dataset
@@ -224,7 +224,7 @@ Lastly, “Wardrobe” and the default “Outfit Name” were added to the top o
 ![](images/design_17.png)
 
 
-#Logistics
+# Logistics
 
 We followed roughly the below timeline
 

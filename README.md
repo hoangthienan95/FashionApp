@@ -2,6 +2,8 @@ App url: http://fashion.us-east-2.elasticbeanstalk.com/
 
 Screencast: https://www.youtube.com/watch?v=R3Unog835bE
 
+[Process book](https://github.com/hoangthienan95/FashionApp/tree/master/process_book)
+
 Model (modified from [here](https://github.com/rxtan2/Learning-Similarity-Conditions)): https://github.com/gsnlyd/FashionEmbed
 
 External library used

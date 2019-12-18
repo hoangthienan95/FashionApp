@@ -1,6 +1,6 @@
-#Home
+# Home
 
-#Overview & Motivation
+# Overview & Motivation
 
 Wouldn't it be great if there's some magical AI algorithm to tell you what items in your wardrobe go well together so you can combine them into a compatible outfit, so you can be fashionable with minimum effort? Well it's a bit complicated, since the definition of the word "compatible" is vague. Take a white cowboy hat and blue dress for example, their colors might be compatible, but the styles are so different that it would warrants an arrest from the fashion police.
 
@@ -8,7 +8,7 @@ Our project aims to turn this vague notion of compatibility to our advantage to 
 
 --- 
 
-#Goals & Questions
+# Goals & Questions
 The goal is to create a content-aware fashion recommendation system that can provide diverse suggestions to encompass different meaning of compatibility that the user might have intended.
 
 With the goal of adopting cutting edge algorithms as the core of our project, we decided to use the neural network architecture presented in a paper published just 4 months ago titled "Learning Similarity Conditions Without Explicit Supervision"
@@ -18,7 +18,7 @@ By turning the images into embeddings in multiple spaces using neural network ar
 The main question is whether this method would actually improve the quality of recommendations or not, whether the recommendations would be interpretable and consistent with human expectations.
 
 --- 
-#Data Sources
+# Data Sources
 
 **Polyvore**:
 The Polyvore fashion website enables users to create outfits
@@ -254,7 +254,7 @@ We followed roughly the below timeline
   - Deploy app
   - Write report, presentation
   
-#Further work
+# Further work
 
 - NLP integration for textual features of clothing description. Multi-modal recommendation.
 
